@@ -1,0 +1,37 @@
+ru/diploma/algorithm/basic/RadiusForm.java
+ ru.diploma.algorithm.basic.RadiusForm
+ru/diploma/algorithm/basic/ItemInitializeType.java
+ ru.diploma.algorithm.basic.ItemInitializeType
+ru/diploma/algorithm/util/RandomCoordinatesGenerator.java
+ ru.diploma.algorithm.util.RandomCoordinatesGenerator
+ru/diploma/algorithm/initialization/neurons/NeuronCreatorImpl.java
+ ru.diploma.algorithm.initialization.neurons.NeuronCreatorImpl
+ ru.diploma.algorithm.initialization.neurons.NeuronCreatorImpl$Creator
+ru/diploma/algorithm/basic/NeuronInitializeType.java
+ ru.diploma.algorithm.basic.NeuronInitializeType
+StartPoint.java
+ StartPoint
+ru/diploma/algorithm/basic/Neuron.java
+ ru.diploma.algorithm.basic.Neuron
+ru/diploma/algorithm/initialization/neurons/type/RandomNeuronCreator.java
+ ru.diploma.algorithm.initialization.neurons.type.RandomNeuronCreator
+ru/diploma/algorithm/initialization/items/ItemCreator.java
+ ru.diploma.algorithm.initialization.items.ItemCreator
+ru/diploma/algorithm/metric/Metric.java
+ ru.diploma.algorithm.metric.Metric
+ru/diploma/algorithm/initialization/items/type/ReadItemCreator.java
+ ru.diploma.algorithm.initialization.items.type.ReadItemCreator
+ru/diploma/algorithm/basic/MetricType.java
+ ru.diploma.algorithm.basic.MetricType
+ru/diploma/algorithm/basic/Item.java
+ ru.diploma.algorithm.basic.Item
+ru/diploma/algorithm/initialization/neurons/type/ManualNeuronCreator.java
+ ru.diploma.algorithm.initialization.neurons.type.ManualNeuronCreator
+ru/diploma/algorithm/initialization/neurons/NeuronCreator.java
+ ru.diploma.algorithm.initialization.neurons.NeuronCreator
+Temp.java
+ Temp
+ru/diploma/algorithm/KohonenSOM.java
+ ru.diploma.algorithm.KohonenSOM
+ru/diploma/algorithm/metric/type/EuclideanMetric.java
+ ru.diploma.algorithm.metric.type.EuclideanMetric
