@@ -1,6 +1,7 @@
 package ru.diploma.algorithm.basic;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Class that presenting an center of cluster in Kohonen SOM
@@ -16,16 +17,6 @@ public class Neuron {
      */
     private List<Double> coordinates;
 
-    /**
-     * Radius of cluster
-     */
-    private double radius;
-
-    /**
-     * Form of cluster's radius
-     */
-    private RadiusForm radiusForm;
-
     public int getNumber() {
         return number;
     }
@@ -40,27 +31,24 @@ public class Neuron {
         this.coordinates = coordinates;
     }
 
-    public double getRadius() {
-        return radius;
-    }
-    public void setRadius(double radius) {
-        this.radius = radius;
-    }
-
-    public RadiusForm getRadiusForm() {
-        return radiusForm;
-    }
-    public void setRadiusForm(RadiusForm radiusForm) {
-        this.radiusForm = radiusForm;
-    }
-
     @Override
     public String toString() {
         return "Neuron{" +
                 "number=" + number +
                 ", coordinates=" + coordinates +
-                ", radius=" + radius +
-                ", radiusForm=" + radiusForm +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Neuron neuron = (Neuron) o;
+        return number == neuron.number;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(number);
     }
 }

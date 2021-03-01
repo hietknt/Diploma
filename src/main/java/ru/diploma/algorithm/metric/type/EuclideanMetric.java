@@ -9,36 +9,29 @@ import java.util.List;
 
 public class EuclideanMetric implements Metric {
     @Override
-    public List<Item> findMinimumDistance(List<Item> items, List<Neuron> neurons) {
-        List<Item> minDistancesItems = new ArrayList<>();
+    public Neuron findMinimumDistance(Item item, List<Neuron> neurons) {
+        List<Double> neuronCoordinates;
+        List<Double> itemCoordinates = item.getCoordinates();
 
-        double minDistance;
-        Item minDistancesItem;
-        for (Neuron neuron : neurons){
-            List<Double> neuronCoordinates = neuron.getCoordinates();
-            minDistance = 999999999.9;
-            minDistancesItem = null;
+        double minDistance = 999999999.9;
+        Neuron minDistancesNeuron = null;
 
-            for (Item item : items){
-                List<Double> itemCoordinates = item.getCoordinates();
+        for (Neuron neuron : neurons) {
+            neuronCoordinates = neuron.getCoordinates();
 
-                double distance = calculateDistance(itemCoordinates, neuronCoordinates);
-                System.out.println(distance);
-                if (distance < minDistance){
-                    minDistance = distance;
-                    minDistancesItem = item;
-                }
-
+            double distance = calculateDistance(itemCoordinates, neuronCoordinates);
+            if (distance < minDistance) {
+                minDistance = distance;
+                minDistancesNeuron = neuron;
             }
-
-            minDistancesItems.add(minDistancesItem);
         }
-        return minDistancesItems;
-    }
 
-    private double calculateDistance(List<Double> itemCoordinate, List<Double> neuronCoordinate){
+        return minDistancesNeuron;
+}
+
+    private double calculateDistance(List<Double> itemCoordinate, List<Double> neuronCoordinate) {
         double distance = 0.0;
-        for (int i = 0; i < itemCoordinate.size(); i++){
+        for (int i = 0; i < itemCoordinate.size(); i++) {
             distance += Math.pow((itemCoordinate.get(i) - neuronCoordinate.get(i)), 2);
         }
         return Math.sqrt(distance);

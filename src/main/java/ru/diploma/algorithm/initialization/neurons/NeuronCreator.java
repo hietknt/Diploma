@@ -9,9 +9,6 @@ import java.util.List;
 public interface NeuronCreator {
     List<Neuron> createNeurons(
             int clusterCount,
-            int parameterCount,
-            double initRadius,
-            RadiusForm radiusForm,
-            NeuronInitializeType initializeType
+            int parameterCount
     );
 }

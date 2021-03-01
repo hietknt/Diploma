@@ -1,9 +1,9 @@
 package ru.diploma.algorithm;
 
 import ru.diploma.algorithm.basic.Item;
-import ru.diploma.algorithm.basic.MetricType;
 import ru.diploma.algorithm.basic.Neuron;
-import ru.diploma.algorithm.metric.type.EuclideanMetric;
+import ru.diploma.algorithm.metric.Metric;
+import ru.diploma.algorithm.util.MathFunctions;
 
 import java.util.List;
 
@@ -18,29 +18,66 @@ public class KohonenSOM {
     // Neuron count
     private int neuronCount;
 
+    // Initial lambda value
+    private double lambda;
+
     // Step of algorithm
     private double step;
 
-    // Type of metric
-    private MetricType metricType;
+    // Count of repeat with same lambda
+    private int repeatCount;
 
-    //TEMP
-    EuclideanMetric euclideanMetric = new EuclideanMetric();
+    // Metric
+    private Metric metric;
 
-    public KohonenSOM(List<Item> items, List<Neuron> neurons, double step, MetricType metricType){
+    // Some math/arrays functions
+    private MathFunctions mathFunctions = new MathFunctions();
+
+    public KohonenSOM(List<Item> items, List<Neuron> neurons, double lambda, double step, int repeatCount, Metric metric) {
         this.items = items;
         this.neurons = neurons;
         this.neuronCount = neurons.size();
+        this.lambda = lambda;
         this.step = step;
+        this.repeatCount = repeatCount;
 
-        this.metricType = metricType;
+        this.metric = metric;
     }
 
-    public void startLearning(){
-        System.out.println(euclideanMetric.findMinimumDistance(this.items, this.neurons));
+    public void startLearning() {
+
+        Neuron nearestNeuron;
+        int neuronIndex;
+        List<Double> itemCoordinates;
+        List<Double> neuronCoordinates;
+        List<Double> newNeuronCoordinates;
+
+        while (lambda > 0.000001) {
+            for (int i = 0; i < repeatCount; i++) {
+                for (Item item : this.items) {
+                    itemCoordinates = item.getCoordinates();
+
+                    nearestNeuron = metric.findMinimumDistance(item, this.neurons);
+                    neuronIndex = this.neurons.indexOf(nearestNeuron);
+
+                    neuronCoordinates = nearestNeuron.getCoordinates();
+
+                    // W(k) = W(k) + lambda*(X(m) - W(k))
+                    newNeuronCoordinates =
+                            mathFunctions
+                                    .sum(neuronCoordinates, mathFunctions
+                                            .multiplication(lambda, (mathFunctions
+                                                    .difference(itemCoordinates, neuronCoordinates))));
+
+                    nearestNeuron.setCoordinates(newNeuronCoordinates);
+                    this.neurons.set(neuronIndex, nearestNeuron);
+                }
+            }
+            lambda -= step;
+        }
     }
 
-    public List<Neuron> getNeurons(){
+    public List<Neuron> getNeurons() {
         return this.neurons;
     }
 
