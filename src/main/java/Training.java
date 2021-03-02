@@ -79,6 +79,8 @@ public class Training {
         );
         kohonenSOM.startLearning();
 
+
+
         System.out.println("\nItems: ");
         printItems(items);
         System.out.println("\nEnd neurons: ");
