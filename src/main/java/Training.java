@@ -9,6 +9,8 @@ import ru.diploma.algorithm.initialization.items.type.ReadItemCreator;
 import ru.diploma.algorithm.initialization.neurons.NeuronCreatorPicker;
 import ru.diploma.algorithm.metric.MetricPicker;
 import ru.diploma.algorithm.normalization.NormalizationPicker;
+import ru.diploma.algorithm.util.ClusterFinder;
+import ru.diploma.algorithm.util.FileWriter;
 
 import java.util.List;
 
@@ -17,7 +19,10 @@ public class Training {
     private NormalizationPicker normalizationPicker = new NormalizationPicker();
     private MetricPicker metricPicker = new MetricPicker();
     private ReadItemCreator itemCreator = new ReadItemCreator();
+    private ClusterFinder clusterFinder = new ClusterFinder();
     private KohonenSOM kohonenSOM;
+
+    private FileWriter writer = new FileWriter();
 
     private OperatingSystem operatingSystem;
     private NeuronInitializeType neuronInitializeType;
@@ -28,6 +33,7 @@ public class Training {
     private double step;
     private int repeatCount;
     private String pathToData;
+    private String appendToPath;
 
     public Training setParams(
             OperatingSystem operatingSystem,
@@ -38,7 +44,8 @@ public class Training {
             double lambda,
             double step,
             int repeatCount,
-            String pathToData
+            String pathToData,
+            String appendToPath
     ) {
         this.operatingSystem = operatingSystem;
         this.neuronInitializeType = neuronInitializeType;
@@ -49,11 +56,15 @@ public class Training {
         this.step = step;
         this.repeatCount = repeatCount;
         this.pathToData = pathToData;
+        this.appendToPath = appendToPath;
 
         return this;
     }
 
     public void start() {
+        System.out.println("STARTED" + (appendToPath.isEmpty() ? "" : (" iteration " + appendToPath)));
+        long start = System.currentTimeMillis();
+
         List<Item> items = null;
         if (operatingSystem == OperatingSystem.UNIX) {
             items = itemCreator.create(pathToData);
@@ -79,12 +90,13 @@ public class Training {
         );
         kohonenSOM.startLearning();
 
+        clusterFinder.find(items, neurons);
 
+        writer.setParams(items, neurons, pathToData, appendToPath)
+                .writeData()
+                .writeNeurons();
 
-        System.out.println("\nItems: ");
-        printItems(items);
-        System.out.println("\nEnd neurons: ");
-        printNeurons(kohonenSOM.getNeurons());
+        System.out.println("ENDED" + (appendToPath.isEmpty() ? "" : (" iteration " + appendToPath)) + " with time: " + (System.currentTimeMillis() - start) + "ms.\n");
     }
 
     private void printNeurons(List<Neuron> neurons) {

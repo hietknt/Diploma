@@ -1,8 +1,6 @@
 package ru.diploma.algorithm.initialization.neurons.type;
 
 import ru.diploma.algorithm.basic.Neuron;
-import ru.diploma.algorithm.basic.NeuronInitializeType;
-import ru.diploma.algorithm.basic.RadiusForm;
 import ru.diploma.algorithm.initialization.neurons.NeuronCreator;
 import ru.diploma.algorithm.util.RandomCoordinatesGenerator;
 

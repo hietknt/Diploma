@@ -1,25 +1,21 @@
 package ru.diploma.algorithm.util;
 
 import ru.diploma.algorithm.basic.Item;
+import ru.diploma.algorithm.basic.MetricType;
+import ru.diploma.algorithm.basic.Neuron;
 import ru.diploma.algorithm.metric.Metric;
+import ru.diploma.algorithm.metric.MetricPicker;
 
 import java.util.List;
 
 public class ClusterFinder {
+    private MetricPicker metricPicker = new MetricPicker();
+    private MetricType metricType = MetricType.EUCLIDEAN;
+    private Metric metric = metricPicker.getMetricByType(metricType);
 
-    private Metric
-
-    public List<Item> find(List<Item> data){
-        for (int i = 0; i < data.size(); i++){
-
+    public void find(List<Item> items, List<Neuron> neurons){
+        for (Item item : items){
+            item.setClusterNumber(metric.findMinimumDistance(item, neurons).getNumber());
         }
-    }
-
-    private double calculateDistance(List<Double> itemCoordinate, List<Double> neuronCoordinate) {
-        double distance = 0.0;
-        for (int i = 0; i < itemCoordinate.size(); i++) {
-            distance += Math.pow((itemCoordinate.get(i) - neuronCoordinate.get(i)), 2);
-        }
-        return Math.sqrt(distance);
     }
 }
