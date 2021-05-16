@@ -7,5 +7,6 @@ public enum MetricType {
     /**
      * Euclidean metric.
      */
-    EUCLIDEAN
+    EUCLIDEAN,
+    MANHATTAN
 }

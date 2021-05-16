@@ -75,7 +75,8 @@ public class Training {
         List<Neuron> neurons = neuronCreatorPicker.getNeuronCreatorByType(neuronInitializeType)
                 .createNeurons(
                         clusterCount,
-                        items.get(0).getCoordinates().size()
+                        items.get(0).getCoordinates().size(),
+                        items
                 );
 
         items = normalizationPicker.getNormalizationByType(normalizationType).normalize(items);
@@ -94,7 +95,8 @@ public class Training {
 
         writer.setParams(items, neurons, pathToData, appendToPath)
                 .writeData()
-                .writeNeurons();
+                .writeNeurons()
+                .writeDistance();
 
         System.out.println("ENDED" + (appendToPath.isEmpty() ? "" : (" iteration " + appendToPath)) + " with time: " + (System.currentTimeMillis() - start) + "ms.\n");
     }

@@ -12,6 +12,10 @@ public enum NeuronInitializeType {
     /**
      * Manually set initial coordinates
      */
-    MANUAL
+    MANUAL,
+
+    AVERAGE,
+
+    KMEANS
 
 }

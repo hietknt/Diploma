@@ -1,5 +1,6 @@
 package ru.diploma.algorithm.initialization.neurons.type;
 
+import ru.diploma.algorithm.basic.Item;
 import ru.diploma.algorithm.basic.Neuron;
 import ru.diploma.algorithm.initialization.neurons.NeuronCreator;
 import ru.diploma.algorithm.util.RandomCoordinatesGenerator;
@@ -11,7 +12,8 @@ public class RandomNeuronCreator implements NeuronCreator {
 
     private RandomCoordinatesGenerator coordinatesGenerator = new RandomCoordinatesGenerator();
 
-    public List<Neuron> createNeurons(int clusterCount, int parameterCount) {
+    @Override
+    public List<Neuron> createNeurons(int clusterCount, int parameterCount, List<Item> items) {
         List<Neuron> neurons = new ArrayList<>();
 
         for (int i = 0; i < clusterCount; i++) {

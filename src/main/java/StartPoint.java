@@ -15,14 +15,14 @@ public class StartPoint {
     public static void OneIterationStart() {
         new Training().setParams(
                 OperatingSystem.WINDOWS,
-                NeuronInitializeType.RANDOM,
+                NeuronInitializeType.KMEANS,
                 NormalizationType.DEFAULT,
                 MetricType.EUCLIDEAN,
-                3,
+                2,
                 0.5,
                 0.005,
                 100,
-                "/bigData.txt", // Start with "/" and ".txt"
+                "/data.txt", // Starts with "/" and ends with ".txt"
                 ""
         ).start();
     }
@@ -38,7 +38,7 @@ public class StartPoint {
                     0.7,
                     0.005,
                     100,
-                    "/bigData.txt", // Start with "/" and ".txt"
+                    "/bigData.txt", // Starts with "/" and ends with ".txt"
                     String.valueOf(i)
             ).start();
         }
