@@ -7,7 +7,7 @@ import ru.diploma.algorithm.metric.Metric;
 
 import java.util.List;
 
-public class ManhattanMetric implements Metric {
+public class EuclideanWithoutSqrtMetric implements Metric {
     @Override
     public Neuron findMinimumDistance(Item item, List<Neuron> neurons) {
         List<Double> neuronCoordinates;
@@ -32,9 +32,9 @@ public class ManhattanMetric implements Metric {
     private double calculateDistance(List<Double> itemCoordinate, List<Double> neuronCoordinate) {
         double distance = 0.0;
         for (int i = 0; i < itemCoordinate.size(); i++) {
-            distance += Math.abs((itemCoordinate.get(i) - neuronCoordinate.get(i)));
+            distance += Math.pow((itemCoordinate.get(i) - neuronCoordinate.get(i)), 2);
         }
-        return Math.sqrt(distance);
+        return distance;
     }
 
     public Neuron findMinimumDistance(Item item, List<Item> items, List<List<Double>> notNormalizedItemsCoordinates, List<Neuron> neurons) {
@@ -42,6 +42,6 @@ public class ManhattanMetric implements Metric {
     }
 
     public MetricType getMetricType() {
-        return MetricType.MANHATTAN;
+        return MetricType.EUCLIDEAN_WITHOUT_SQRT;
     }
 }

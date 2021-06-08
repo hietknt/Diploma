@@ -20,22 +20,23 @@ public class KmeansNeuronCreator implements NeuronCreator {
 
     @Override
     public List<Neuron> createNeurons(int clusterCount, int parameterCount, List<Item> items) {
-
-        //List<Neuron> neurons = randomNeuronCreator.createNeurons(clusterCount, parameterCount, items);
         List<Double> cluster;
-        List<List<Double>> clusters = new ArrayList<>();
+        List<Neuron> neurons;
         List<Double> oldClusters;
         List<Double> newClusters;
         int count;
 
-        for (Item item : items) {
-            item.setClusterNumber(random.nextInt(clusterCount));
-        }
+        do {
+            for (Item item : items) {
+                item.setClusterNumber(random.nextInt(clusterCount));
+            }
+        } while (!hasAllCluster(items, clusterCount));
 
         oldClusters = getClusterNumbers(items);
         newClusters = getClusterNumbers(items);
 
         do {
+            neurons = new ArrayList<>();
             // Find clusters by avg values
             for (int i = 0; i < clusterCount; i++) {
                 cluster = new ArrayList<>();
@@ -50,17 +51,37 @@ public class KmeansNeuronCreator implements NeuronCreator {
                         count++;
                     }
                 }
+
                 cluster = functions.divideToValue(cluster, count);
-                clusters.add(cluster);
+
+                if (!cluster.isEmpty()) {
+                    Neuron neuron = new Neuron();
+                    neuron.setNumber(i);
+                    neuron.setCoordinates(cluster);
+                    neurons.add(neuron);
+                }
             }
 
-            //
+            double minDistance;
+            int clusterNumber = 0;
+            double distance;
+            for (Item item: items) {
+                minDistance = 9999999999.0;
+                for (Neuron neuron: neurons) {
+                    distance = findDistance(item.getCoordinates(), neuron.getCoordinates());
+                    if (minDistance > distance) {
+                        minDistance = distance;
+                        clusterNumber = neuron.getNumber();
+                    }
+                }
+                item.setClusterNumber(clusterNumber);
+            }
+            oldClusters = newClusters;
+            newClusters = getClusterNumbers(items);
 
+        } while (!oldClusters.equals(newClusters));
 
-        } while (oldClusters != newClusters);
-
-
-        return null;
+        return neurons;
     }
 
     private List<Double> getClusterNumbers(List<Item> items) {
@@ -69,5 +90,30 @@ public class KmeansNeuronCreator implements NeuronCreator {
             result.add(item.getClusterNumber());
         }
         return result;
+    }
+
+    private double findDistance(List<Double> itemCoordinates, List<Double> neuronCoordinates){
+        double distance = 0.0;
+        for (int i = 0; i < itemCoordinates.size(); i++) {
+            distance += Math.pow((itemCoordinates.get(i) - neuronCoordinates.get(i)), 2);
+        }
+        return Math.sqrt(distance);
+    }
+
+    private boolean hasAllCluster(List<Item> items, int clusterCount) {
+        boolean temp;
+        for (int i = 0; i < clusterCount; i++) {
+            temp = false;
+            for (Item item : items) {
+                if (item.getClusterNumber() == i) {
+                    temp = true;
+                    break;
+                }
+            }
+            if (temp == false) {
+                return false;
+            }
+        }
+        return  true;
     }
 }

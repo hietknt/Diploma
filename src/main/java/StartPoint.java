@@ -17,12 +17,12 @@ public class StartPoint {
                 OperatingSystem.WINDOWS,
                 NeuronInitializeType.KMEANS,
                 NormalizationType.DEFAULT,
-                MetricType.EUCLIDEAN,
-                2,
+                MetricType.MAHALANOBIS,
+                3,
                 0.5,
                 0.005,
                 100,
-                "/data.txt", // Starts with "/" and ends with ".txt"
+                "/bigData.txt", // Starts with "/" and ends with ".txt"
                 ""
         ).start();
     }

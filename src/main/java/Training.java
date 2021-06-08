@@ -12,6 +12,7 @@ import ru.diploma.algorithm.normalization.NormalizationPicker;
 import ru.diploma.algorithm.util.ClusterFinder;
 import ru.diploma.algorithm.util.FileWriter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Training {
@@ -66,11 +67,20 @@ public class Training {
         long start = System.currentTimeMillis();
 
         List<Item> items = null;
+        List<List<Double>> notNormalizedItemsCoordinates = new ArrayList<>();
         if (operatingSystem == OperatingSystem.UNIX) {
             items = itemCreator.create(pathToData);
         } else if (operatingSystem == OperatingSystem.WINDOWS) {
             items = itemCreator.createWindows(pathToData);
         }
+        for (Item item : items) {
+            List<Double> line = new ArrayList<>();
+            for (int i = 0; i < item.getCoordinates().size(); i++) {
+                line.add(item.getCoordinates().get(i));
+            }
+            notNormalizedItemsCoordinates.add(line);
+        }
+        items = normalizationPicker.getNormalizationByType(normalizationType).normalize(items);
 
         List<Neuron> neurons = neuronCreatorPicker.getNeuronCreatorByType(neuronInitializeType)
                 .createNeurons(
@@ -79,10 +89,9 @@ public class Training {
                         items
                 );
 
-        items = normalizationPicker.getNormalizationByType(normalizationType).normalize(items);
-
         kohonenSOM = new KohonenSOM(
                 items,
+                notNormalizedItemsCoordinates,
                 neurons,
                 lambda,
                 step,

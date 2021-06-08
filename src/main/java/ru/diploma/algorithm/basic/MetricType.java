@@ -8,5 +8,8 @@ public enum MetricType {
      * Euclidean metric.
      */
     EUCLIDEAN,
-    MANHATTAN
+    EUCLIDEAN_WITHOUT_SQRT,
+    MANHATTAN,
+    CHEBYSHEV,
+    MAHALANOBIS
 }

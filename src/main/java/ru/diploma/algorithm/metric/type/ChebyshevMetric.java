@@ -7,7 +7,7 @@ import ru.diploma.algorithm.metric.Metric;
 
 import java.util.List;
 
-public class ManhattanMetric implements Metric {
+public class ChebyshevMetric implements Metric {
     @Override
     public Neuron findMinimumDistance(Item item, List<Neuron> neurons) {
         List<Double> neuronCoordinates;
@@ -31,10 +31,14 @@ public class ManhattanMetric implements Metric {
 
     private double calculateDistance(List<Double> itemCoordinate, List<Double> neuronCoordinate) {
         double distance = 0.0;
+        double maxDistance = 0.0;
         for (int i = 0; i < itemCoordinate.size(); i++) {
-            distance += Math.abs((itemCoordinate.get(i) - neuronCoordinate.get(i)));
+            distance = Math.abs((itemCoordinate.get(i) - neuronCoordinate.get(i)));
+            if (maxDistance < distance) {
+                maxDistance = distance;
+            }
         }
-        return Math.sqrt(distance);
+        return maxDistance;
     }
 
     public Neuron findMinimumDistance(Item item, List<Item> items, List<List<Double>> notNormalizedItemsCoordinates, List<Neuron> neurons) {
@@ -42,6 +46,6 @@ public class ManhattanMetric implements Metric {
     }
 
     public MetricType getMetricType() {
-        return MetricType.MANHATTAN;
+        return MetricType.CHEBYSHEV;
     }
 }

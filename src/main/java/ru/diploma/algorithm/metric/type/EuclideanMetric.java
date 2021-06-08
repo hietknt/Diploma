@@ -1,10 +1,10 @@
 package ru.diploma.algorithm.metric.type;
 
 import ru.diploma.algorithm.basic.Item;
+import ru.diploma.algorithm.basic.MetricType;
 import ru.diploma.algorithm.basic.Neuron;
 import ru.diploma.algorithm.metric.Metric;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class EuclideanMetric implements Metric {
@@ -27,7 +27,7 @@ public class EuclideanMetric implements Metric {
         }
 
         return minDistancesNeuron;
-}
+    }
 
     private double calculateDistance(List<Double> itemCoordinate, List<Double> neuronCoordinate) {
         double distance = 0.0;
@@ -35,5 +35,13 @@ public class EuclideanMetric implements Metric {
             distance += Math.pow((itemCoordinate.get(i) - neuronCoordinate.get(i)), 2);
         }
         return Math.sqrt(distance);
+    }
+
+    public Neuron findMinimumDistance(Item item, List<Item> items, List<List<Double>> notNormalizedItemsCoordinates, List<Neuron> neurons) {
+        return null;
+    }
+
+    public MetricType getMetricType() {
+        return MetricType.EUCLIDEAN;
     }
 }

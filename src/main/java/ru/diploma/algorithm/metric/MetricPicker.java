@@ -1,7 +1,10 @@
 package ru.diploma.algorithm.metric;
 
 import ru.diploma.algorithm.basic.MetricType;
+import ru.diploma.algorithm.metric.type.ChebyshevMetric;
 import ru.diploma.algorithm.metric.type.EuclideanMetric;
+import ru.diploma.algorithm.metric.type.EuclideanWithoutSqrtMetric;
+import ru.diploma.algorithm.metric.type.MahalanobisMetric;
 import ru.diploma.algorithm.metric.type.ManhattanMetric;
 
 import java.util.HashMap;
@@ -13,7 +16,10 @@ public class MetricPicker {
 
     public MetricPicker() {
         metricMap.put(MetricType.EUCLIDEAN, new EuclideanMetric());
+        metricMap.put(MetricType.EUCLIDEAN_WITHOUT_SQRT, new EuclideanWithoutSqrtMetric());
         metricMap.put(MetricType.MANHATTAN, new ManhattanMetric());
+        metricMap.put(MetricType.MAHALANOBIS, new MahalanobisMetric());
+        metricMap.put(MetricType.CHEBYSHEV, new ChebyshevMetric());
     }
 
     public Metric getMetricByType(MetricType type){

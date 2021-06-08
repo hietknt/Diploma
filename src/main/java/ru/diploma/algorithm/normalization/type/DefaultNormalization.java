@@ -9,7 +9,6 @@ public class DefaultNormalization implements Normalization {
 
     @Override
     public List<Item> normalize(List<Item> data) {
-
         double paramsSize = data.get(0).getCoordinates().size();
 
         double value;
