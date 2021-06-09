@@ -1,14 +1,14 @@
-package ru.diploma.algorithm;
+package ru.diploma.algorithm.training_algorithms.type;
 
 import ru.diploma.algorithm.basic.Item;
-import ru.diploma.algorithm.basic.MetricType;
 import ru.diploma.algorithm.basic.Neuron;
 import ru.diploma.algorithm.metric.Metric;
+import ru.diploma.algorithm.training_algorithms.TrainingAlgorithm;
 import ru.diploma.algorithm.util.MathFunctions;
 
 import java.util.List;
 
-public class KohonenSOM {
+public class KohonenSOM implements TrainingAlgorithm {
 
     // Main data.txt
     private List<Item> items;
@@ -37,7 +37,8 @@ public class KohonenSOM {
     // Some math/arrays functions
     private MathFunctions mathFunctions = new MathFunctions();
 
-    public KohonenSOM(List<Item> items, List<List<Double>> notNormalizedItemsCoordinates, List<Neuron> neurons, double lambda, double step, int repeatCount, Metric metric) {
+    @Override
+    public void setParams(List<Item> items, List<List<Double>> notNormalizedItemsCoordinates, List<Neuron> neurons, double lambda, double step, int repeatCount, Metric metric) {
         this.items = items;
         this.notNormalizedItemsCoordinates = notNormalizedItemsCoordinates;
         this.neurons = neurons;
@@ -45,12 +46,11 @@ public class KohonenSOM {
         this.lambda = lambda;
         this.step = step;
         this.repeatCount = repeatCount;
-
         this.metric = metric;
     }
 
+    @Override
     public void startLearning() {
-
         Neuron nearestNeuron;
         int neuronIndex;
         List<Double> itemCoordinates;
@@ -86,10 +86,12 @@ public class KohonenSOM {
         }
     }
 
+    @Override
     public List<Neuron> getNeurons() {
         return this.neurons;
     }
 
+    @Override
     public List<Item> getItems() {
         return items;
     }

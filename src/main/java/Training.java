@@ -1,4 +1,6 @@
-import ru.diploma.algorithm.KohonenSOM;
+import ru.diploma.algorithm.training_algorithms.TrainingAlgorithm;
+import ru.diploma.algorithm.training_algorithms.TrainingAlgorithmPicker;
+import ru.diploma.algorithm.training_algorithms.TrainingAlgorithmType;
 import ru.diploma.algorithm.OperatingSystem;
 import ru.diploma.algorithm.basic.Item;
 import ru.diploma.algorithm.basic.MetricType;
@@ -21,7 +23,6 @@ public class Training {
     private MetricPicker metricPicker = new MetricPicker();
     private ReadItemCreator itemCreator = new ReadItemCreator();
     private ClusterFinder clusterFinder = new ClusterFinder();
-    private KohonenSOM kohonenSOM;
 
     private FileWriter writer = new FileWriter();
 
@@ -33,10 +34,14 @@ public class Training {
     private double lambda;
     private double step;
     private int repeatCount;
+    private int clusterMultiplier;
     private String pathToData;
     private String appendToPath;
 
+    private TrainingAlgorithmType trainingAlgorithmType;
+
     public Training setParams(
+            TrainingAlgorithmType trainingAlgorithmType,
             OperatingSystem operatingSystem,
             NeuronInitializeType neuronInitializeType,
             NormalizationType normalizationType,
@@ -45,9 +50,11 @@ public class Training {
             double lambda,
             double step,
             int repeatCount,
+            int neuronsMultiplier,
             String pathToData,
             String appendToPath
     ) {
+        this.trainingAlgorithmType = trainingAlgorithmType;
         this.operatingSystem = operatingSystem;
         this.neuronInitializeType = neuronInitializeType;
         this.normalizationType = normalizationType;
@@ -56,6 +63,7 @@ public class Training {
         this.lambda = lambda;
         this.step = step;
         this.repeatCount = repeatCount;
+        this.clusterMultiplier = neuronsMultiplier;
         this.pathToData = pathToData;
         this.appendToPath = appendToPath;
 
@@ -82,6 +90,12 @@ public class Training {
         }
         items = normalizationPicker.getNormalizationByType(normalizationType).normalize(items);
 
+        // if using greedy heuristics then use only RANDOM neuron generator
+        if (trainingAlgorithmType == TrainingAlgorithmType.GREEDY_HEURISTICS) {
+            this.clusterCount *= clusterMultiplier;
+            this.neuronInitializeType = NeuronInitializeType.RANDOM;
+        }
+
         List<Neuron> neurons = neuronCreatorPicker.getNeuronCreatorByType(neuronInitializeType)
                 .createNeurons(
                         clusterCount,
@@ -89,7 +103,8 @@ public class Training {
                         items
                 );
 
-        kohonenSOM = new KohonenSOM(
+        TrainingAlgorithm trainingAlgorithm = new TrainingAlgorithmPicker().getMetricByType(this.trainingAlgorithmType);
+        trainingAlgorithm.setParams(
                 items,
                 notNormalizedItemsCoordinates,
                 neurons,
@@ -98,7 +113,7 @@ public class Training {
                 repeatCount,
                 metricPicker.getMetricByType(metricType)
         );
-        kohonenSOM.startLearning();
+        trainingAlgorithm.startLearning();
 
         clusterFinder.find(items, neurons);
 
