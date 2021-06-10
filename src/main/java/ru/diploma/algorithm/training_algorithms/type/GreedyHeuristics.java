@@ -21,6 +21,7 @@ public class GreedyHeuristics implements TrainingAlgorithm {
 
     // Neuron count
     private int neuronCount;
+    private int exactlyNeuronCount;
 
     // Initial lambda value
     private double lambda;
@@ -38,7 +39,15 @@ public class GreedyHeuristics implements TrainingAlgorithm {
     private MathFunctions mathFunctions = new MathFunctions();
 
     @Override
-    public void setParams(List<Item> items, List<List<Double>> notNormalizedItemsCoordinates, List<Neuron> neurons, double lambda, double step, int repeatCount, Metric metric) {
+    public void setParams(List<Item> items,
+                          List<List<Double>> notNormalizedItemsCoordinates,
+                          List<Neuron> neurons,
+                          double lambda,
+                          double step,
+                          int repeatCount,
+                          Metric metric,
+                          int neuronsMultiplier
+    ) {
         this.items = items;
         this.notNormalizedItemsCoordinates = notNormalizedItemsCoordinates;
         this.neurons = neurons;
@@ -47,10 +56,64 @@ public class GreedyHeuristics implements TrainingAlgorithm {
         this.step = step;
         this.repeatCount = repeatCount;
         this.metric = metric;
+        this.exactlyNeuronCount = neuronCount / neuronsMultiplier;
     }
 
     @Override
     public void startLearning() {
+        Neuron nearestNeuron;
+        Neuron farthestNeuron;
+        int neuronIndex;
+        List<Double> itemCoordinates;
+        List<Double> neuronCoordinates;
+        List<Double> newNeuronCoordinates;
+
+        int n = this.items.size();
+        repeatCount = (int) Math.floor((double) n / (double) neuronCount + 1);
+
+        int tempLambdaDivider = 1;
+
+        int counter = 0;
+        for (Item item : this.items) {
+            if (counter == repeatCount) {
+                System.out.println("Lambda: " + lambda);
+                counter = 0;
+                // Тут менять коэф. обучения. Обычная формула: lambda -= step;
+                //lambda = 0.5 / ++tempLambdaDivider;
+                lambda -= step;
+
+                // Remove farthest neuron
+                if (this.neurons.size() != this.exactlyNeuronCount) {
+                    switch (metric.getMetricType()) {
+                        case MAHALANOBIS -> farthestNeuron = metric.findMaximumDistanceBetweenItemsAndClusters(this.items, this.notNormalizedItemsCoordinates, this.neurons);
+                        default -> farthestNeuron = metric.findMaximumDistanceBetweenItemsAndClusters(this.items, this.neurons);
+                    }
+
+                    this.neurons.remove(farthestNeuron);
+                }
+            }
+            itemCoordinates = item.getCoordinates();
+
+            switch (metric.getMetricType()) {
+                case MAHALANOBIS -> nearestNeuron = metric.findMinimumDistance(item, this.items, this.notNormalizedItemsCoordinates, this.neurons);
+                default -> nearestNeuron = metric.findMinimumDistance(item, this.neurons);
+            }
+            neuronIndex = this.neurons.indexOf(nearestNeuron);
+
+            neuronCoordinates = nearestNeuron.getCoordinates();
+
+            // W(k) = W(k) + lambda*(X(m) - W(k))
+            newNeuronCoordinates =
+                    mathFunctions
+                            .sum(neuronCoordinates, mathFunctions
+                                    .multiplication(lambda, (mathFunctions
+                                            .difference(itemCoordinates, neuronCoordinates))));
+
+            nearestNeuron.setCoordinates(newNeuronCoordinates);
+            this.neurons.set(neuronIndex, nearestNeuron);
+
+            counter++;
+        }
 
     }
 

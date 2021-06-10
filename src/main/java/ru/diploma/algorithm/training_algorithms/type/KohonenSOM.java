@@ -38,7 +38,15 @@ public class KohonenSOM implements TrainingAlgorithm {
     private MathFunctions mathFunctions = new MathFunctions();
 
     @Override
-    public void setParams(List<Item> items, List<List<Double>> notNormalizedItemsCoordinates, List<Neuron> neurons, double lambda, double step, int repeatCount, Metric metric) {
+    public void setParams(List<Item> items,
+                          List<List<Double>> notNormalizedItemsCoordinates,
+                          List<Neuron> neurons,
+                          double lambda,
+                          double step,
+                          int repeatCount,
+                          Metric metric,
+                          int neuronsMultiplier
+    ) {
         this.items = items;
         this.notNormalizedItemsCoordinates = notNormalizedItemsCoordinates;
         this.neurons = neurons;

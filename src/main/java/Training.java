@@ -111,7 +111,8 @@ public class Training {
                 lambda,
                 step,
                 repeatCount,
-                metricPicker.getMetricByType(metricType)
+                metricPicker.getMetricByType(metricType),
+                this.clusterMultiplier
         );
         trainingAlgorithm.startLearning();
 

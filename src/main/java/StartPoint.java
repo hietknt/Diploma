@@ -2,7 +2,6 @@ import ru.diploma.algorithm.OperatingSystem;
 import ru.diploma.algorithm.basic.MetricType;
 import ru.diploma.algorithm.basic.NeuronInitializeType;
 import ru.diploma.algorithm.basic.NormalizationType;
-import ru.diploma.algorithm.training_algorithms.TrainingAlgorithm;
 import ru.diploma.algorithm.training_algorithms.TrainingAlgorithmType;
 
 public class StartPoint {
@@ -18,12 +17,12 @@ public class StartPoint {
         new Training().setParams(
                 TrainingAlgorithmType.GREEDY_HEURISTICS,
                 OperatingSystem.WINDOWS,
-                NeuronInitializeType.KMEANS,
+                NeuronInitializeType.RANDOM,
                 NormalizationType.DEFAULT,
-                MetricType.MAHALANOBIS,
+                MetricType.EUCLIDEAN,
                 3,
                 0.5,
-                0.005,
+                0.075,
                 100,
                 2,
                 "/bigData.txt", // Starts with "/" and ends with ".txt"
@@ -34,17 +33,17 @@ public class StartPoint {
     public static void ManyIterationStart() {
         for (int i = 0; i < iterationCountSize; i++) {
             new Training().setParams(
-                    TrainingAlgorithmType.KOHONEN_SOM,
+                    TrainingAlgorithmType.GREEDY_HEURISTICS,
                     OperatingSystem.WINDOWS,
                     NeuronInitializeType.RANDOM,
                     NormalizationType.DEFAULT,
                     MetricType.EUCLIDEAN,
-                    3,
-                    0.7,
+                    2,
+                    0.5,
                     0.005,
                     100,
-                    1,
-                    "/bigData.txt", // Starts with "/" and ends with ".txt"
+                    2,
+                    "/data.txt", // Starts with "/" and ends with ".txt"
                     String.valueOf(i)
             ).start();
         }

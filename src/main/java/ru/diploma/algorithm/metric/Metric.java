@@ -10,5 +10,11 @@ public interface Metric {
     Neuron findMinimumDistance(Item item, List<Neuron> neurons);
     Neuron findMinimumDistance(Item item, List<Item> items, List<List<Double>> notNormalizedItemsCoordinates, List<Neuron> neurons);
 
+    Neuron findMaximumDistance(Item item, List<Neuron> neurons);
+    Neuron findMaximumDistance(Item item, List<Item> items, List<List<Double>> notNormalizedItemsCoordinates, List<Neuron> neurons);
+
+    Neuron findMaximumDistanceBetweenItemsAndClusters(List<Item> items, List<Neuron> neurons);
+    Neuron findMaximumDistanceBetweenItemsAndClusters(List<Item> items, List<List<Double>> notNormalizedItemsCoordinates, List<Neuron> neurons);
+
     MetricType getMetricType();
 }

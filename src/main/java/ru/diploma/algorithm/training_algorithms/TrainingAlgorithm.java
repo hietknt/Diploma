@@ -15,7 +15,8 @@ public interface TrainingAlgorithm {
             double lambda,
             double step,
             int repeatCount,
-            Metric metric
+            Metric metric,
+            int neuronsMultiplier
     );
 
     void startLearning();

@@ -23,11 +23,6 @@ public class MahalanobisMetric implements Metric {
     }
 
     @Override
-    public Neuron findMinimumDistance(Item item, List<Neuron> neurons) {
-        return null;
-    }
-
-    @Override
     public Neuron findMinimumDistance(Item item, List<Item> items, List<List<Double>> notNormalizedItemsCoordinates, List<Neuron> neurons) {
         List<Double> distances = calculateDistance(item, notNormalizedItemsCoordinates, neurons);
 
@@ -42,6 +37,54 @@ public class MahalanobisMetric implements Metric {
         }
 
         return minDistancesNeuron;
+    }
+
+    @Override
+    public Neuron findMaximumDistance(Item item, List<Item> items, List<List<Double>> notNormalizedItemsCoordinates, List<Neuron> neurons) {
+        List<Double> distances = calculateDistance(item, notNormalizedItemsCoordinates, neurons);
+
+        double maxDistance = distances.get(0);
+        Neuron maxDistancesNeuron = neurons.get(0);
+
+        for (int i = 0; i < distances.size(); i++) {
+            if (distances.get(i) > maxDistance) {
+                maxDistance = distances.get(i);
+                maxDistancesNeuron = neurons.get(i);
+            }
+        }
+
+        return maxDistancesNeuron;
+    }
+
+    @Override
+    public Neuron findMaximumDistanceBetweenItemsAndClusters(List<Item> items, List<List<Double>> notNormalizedItemsCoordinates, List<Neuron> neurons) {
+        List<List<Double>> distances = new ArrayList<>();
+
+        for (Item tempItem : items) {
+            List<Double> distanceLine = calculateDistance(tempItem, notNormalizedItemsCoordinates, neurons);
+            distances.add(distanceLine);
+        }
+
+        List<Double> sums = new ArrayList<>();
+        double sum;
+        for (int i = 0; i < distances.get(0).size(); i++) {
+            sum = 0.0;
+            for (int j = 0; j < distances.size(); j++) {
+                sum += distances.get(j).get(i);
+            }
+            sums.add(sum);
+        }
+
+        double maxDistance = sums.get(0);
+        int neuronIndex = 0;
+        for (int i = 1; i < sums.size(); i++) {
+            if (sums.get(i) > maxDistance) {
+                maxDistance = sums.get(i);
+                neuronIndex = i;
+            }
+        }
+
+        return neurons.get(neuronIndex);
     }
 
     private List<Double> calculateDistance(Item item, List<List<Double>> notNormalizedItemsCoordinates, List<Neuron> neurons) {
@@ -115,7 +158,6 @@ public class MahalanobisMetric implements Metric {
                 array[i][j] = covarianceMatrix.get(i).get(j);
             }
         }
-
         RealMatrix matrix = new Array2DRowRealMatrix(array, false);
         RealMatrix inverse = MatrixUtils.inverse(matrix);
 
@@ -128,6 +170,21 @@ public class MahalanobisMetric implements Metric {
             }
             this.inverseCovarianceMatrix.add(line);
         }
+    }
+
+    @Override
+    public Neuron findMaximumDistanceBetweenItemsAndClusters(List<Item> items, List<Neuron> neurons) {
+        return null;
+    }
+
+    @Override
+    public Neuron findMinimumDistance(Item item, List<Neuron> neurons) {
+        return null;
+    }
+
+    @Override
+    public Neuron findMaximumDistance(Item item, List<Neuron> neurons) {
+        return null;
     }
 
     @Override
