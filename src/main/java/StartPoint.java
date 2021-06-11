@@ -15,17 +15,17 @@ public class StartPoint {
 
     public static void OneIterationStart() {
         new Training().setParams(
-                TrainingAlgorithmType.GREEDY_HEURISTICS,
+                TrainingAlgorithmType.KOHONEN_SOM_2,
                 OperatingSystem.WINDOWS,
                 NeuronInitializeType.RANDOM,
                 NormalizationType.DEFAULT,
                 MetricType.EUCLIDEAN,
-                3,
+                2,
                 0.5,
                 0.075,
                 100,
                 2,
-                "/bigData.txt", // Starts with "/" and ends with ".txt"
+                "/data.txt", // Starts with "/" and ends with ".txt"
                 ""
         ).start();
     }
