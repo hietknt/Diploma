@@ -1,7 +1,7 @@
 package ru.diploma.algorithm.util;
 
 import ru.diploma.algorithm.basic.Item;
-import ru.diploma.algorithm.basic.MetricType;
+import ru.diploma.algorithm.metric.MetricType;
 import ru.diploma.algorithm.basic.Neuron;
 import ru.diploma.algorithm.metric.Metric;
 import ru.diploma.algorithm.metric.MetricPicker;

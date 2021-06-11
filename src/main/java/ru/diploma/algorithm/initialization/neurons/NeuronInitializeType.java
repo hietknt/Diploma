@@ -1,4 +1,4 @@
-package ru.diploma.algorithm.basic;
+package ru.diploma.algorithm.initialization.neurons;
 
 /**
  * Type of initialization of neurons

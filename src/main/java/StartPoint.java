@@ -1,7 +1,7 @@
 import ru.diploma.algorithm.OperatingSystem;
-import ru.diploma.algorithm.basic.MetricType;
-import ru.diploma.algorithm.basic.NeuronInitializeType;
-import ru.diploma.algorithm.basic.NormalizationType;
+import ru.diploma.algorithm.metric.MetricType;
+import ru.diploma.algorithm.initialization.neurons.NeuronInitializeType;
+import ru.diploma.algorithm.normalization.NormalizationType;
 import ru.diploma.algorithm.training_algorithms.TrainingAlgorithmType;
 
 public class StartPoint {

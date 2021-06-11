@@ -5,7 +5,7 @@ import org.apache.commons.math3.linear.MatrixUtils;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.stat.correlation.Covariance;
 import ru.diploma.algorithm.basic.Item;
-import ru.diploma.algorithm.basic.MetricType;
+import ru.diploma.algorithm.metric.MetricType;
 import ru.diploma.algorithm.basic.Neuron;
 import ru.diploma.algorithm.metric.Metric;
 import ru.diploma.algorithm.util.MathFunctions;

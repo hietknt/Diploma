@@ -1,11 +1,10 @@
 package ru.diploma.algorithm.metric.type;
 
 import ru.diploma.algorithm.basic.Item;
-import ru.diploma.algorithm.basic.MetricType;
+import ru.diploma.algorithm.metric.MetricType;
 import ru.diploma.algorithm.basic.Neuron;
 import ru.diploma.algorithm.metric.Metric;
 
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 

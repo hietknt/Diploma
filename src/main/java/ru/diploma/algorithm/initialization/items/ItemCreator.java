@@ -1,7 +1,6 @@
 package ru.diploma.algorithm.initialization.items;
 
 import ru.diploma.algorithm.basic.Item;
-import ru.diploma.algorithm.basic.ItemInitializeType;
 
 import java.util.List;
 

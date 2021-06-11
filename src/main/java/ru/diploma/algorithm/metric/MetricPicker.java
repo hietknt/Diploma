@@ -1,6 +1,5 @@
 package ru.diploma.algorithm.metric;
 
-import ru.diploma.algorithm.basic.MetricType;
 import ru.diploma.algorithm.metric.type.ChebyshevMetric;
 import ru.diploma.algorithm.metric.type.EuclideanMetric;
 import ru.diploma.algorithm.metric.type.EuclideanWithoutSqrtMetric;

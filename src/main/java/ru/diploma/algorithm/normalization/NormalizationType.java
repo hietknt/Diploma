@@ -1,4 +1,4 @@
-package ru.diploma.algorithm.basic;
+package ru.diploma.algorithm.normalization;
 
 /**
  * Type of normalization of data

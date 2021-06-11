@@ -1,6 +1,5 @@
 package ru.diploma.algorithm.normalization;
 
-import ru.diploma.algorithm.basic.NormalizationType;
 import ru.diploma.algorithm.normalization.type.DefaultNormalization;
 
 import java.util.HashMap;

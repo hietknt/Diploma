@@ -1,7 +1,6 @@
 package ru.diploma.algorithm.normalization;
 
 import ru.diploma.algorithm.basic.Item;
-import ru.diploma.algorithm.basic.NormalizationType;
 
 import java.util.List;
 
