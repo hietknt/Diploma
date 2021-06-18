@@ -84,6 +84,39 @@ public class EuclideanWithoutSqrtMetric implements Metric {
         return neurons.get(neuronIndex);
     }
 
+    @Override
+    public Neuron findMinimalDistanceBetweenItemsAndClusters(List<Item> items, List<Neuron> neurons) {
+        List<List<Double>> distances = new ArrayList<>();
+        for (Item item : items) {
+            List<Double> distancesBetweenItemAndNeurons = new ArrayList<>();
+            for (Neuron neuron : neurons) {
+                distancesBetweenItemAndNeurons.add(calculateDistance(item.getCoordinates(), neuron.getCoordinates()));
+            }
+            distances.add(distancesBetweenItemAndNeurons);
+        }
+
+        List<Double> sums = new ArrayList<>();
+        double sum;
+        for (int i = 0; i < distances.get(0).size(); i++) {
+            sum = 0.0;
+            for (int j = 0; j < distances.size(); j++) {
+                sum += distances.get(j).get(i);
+            }
+            sums.add(sum);
+        }
+
+        double minDistance = sums.get(0);
+        int neuronIndex = 0;
+        for (int i = 1; i < sums.size(); i++) {
+            if (sums.get(i) < minDistance) {
+                minDistance = sums.get(i);
+                neuronIndex = i;
+            }
+        }
+
+        return neurons.get(neuronIndex);
+    }
+
     private double calculateDistance(List<Double> itemCoordinate, List<Double> neuronCoordinate) {
         double distance = 0.0;
         for (int i = 0; i < itemCoordinate.size(); i++) {
@@ -103,6 +136,11 @@ public class EuclideanWithoutSqrtMetric implements Metric {
 
     @Override
     public Neuron findMaximumDistanceBetweenItemsAndClusters(List<Item> items, List<List<Double>> notNormalizedItemsCoordinates, List<Neuron> neurons) {
+        return null;
+    }
+
+    @Override
+    public Neuron findMinimalDistanceBetweenItemsAndClusters(List<Item> items, List<List<Double>> notNormalizedItemsCoordinates, List<Neuron> neurons) {
         return null;
     }
 

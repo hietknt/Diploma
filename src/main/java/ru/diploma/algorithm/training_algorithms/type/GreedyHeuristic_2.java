@@ -8,8 +8,8 @@ import ru.diploma.algorithm.util.MathFunctions;
 
 import java.util.List;
 
-// Жадные эаристики с удалением самого дальнего нейрона
-public class GreedyHeuristics implements TrainingAlgorithm {
+// Жадные эвристики с удалением ближайшего нейрона
+public class GreedyHeuristic_2 implements TrainingAlgorithm {
 
     // Main data.txt
     private List<Item> items;
@@ -85,8 +85,8 @@ public class GreedyHeuristics implements TrainingAlgorithm {
                 // Remove farthest neuron
                 if (this.neurons.size() != this.exactlyNeuronCount) {
                     switch (metric.getMetricType()) {
-                        case MAHALANOBIS -> farthestNeuron = metric.findMaximumDistanceBetweenItemsAndClusters(this.items, this.notNormalizedItemsCoordinates, this.neurons);
-                        default -> farthestNeuron = metric.findMaximumDistanceBetweenItemsAndClusters(this.items, this.neurons);
+                        case MAHALANOBIS -> farthestNeuron = metric.findMinimalDistanceBetweenItemsAndClusters(this.items, this.notNormalizedItemsCoordinates, this.neurons);
+                        default -> farthestNeuron = metric.findMinimalDistanceBetweenItemsAndClusters(this.items, this.neurons);
                     }
 
                     this.neurons.remove(farthestNeuron);

@@ -1,8 +1,6 @@
 package ru.diploma.algorithm.training_algorithms;
 
-import ru.diploma.algorithm.training_algorithms.type.GreedyHeuristics;
-import ru.diploma.algorithm.training_algorithms.type.KohonenSOM;
-import ru.diploma.algorithm.training_algorithms.type.KohonenSOM_2;
+import ru.diploma.algorithm.training_algorithms.type.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +12,9 @@ public class TrainingAlgorithmPicker {
     public TrainingAlgorithmPicker() {
         metricMap.put(TrainingAlgorithmType.KOHONEN_SOM, new KohonenSOM());
         metricMap.put(TrainingAlgorithmType.KOHONEN_SOM_2, new KohonenSOM_2());
+        metricMap.put(TrainingAlgorithmType.KOHONEN_SOM_GREEDY, new KohonenSOM_Greedy());
         metricMap.put(TrainingAlgorithmType.GREEDY_HEURISTICS, new GreedyHeuristics());
+        metricMap.put(TrainingAlgorithmType.GREEDY_HEURISTICS_2, new GreedyHeuristic_2());
     }
 
     public TrainingAlgorithm getMetricByType(TrainingAlgorithmType type){

@@ -87,6 +87,42 @@ public class MahalanobisMetric implements Metric {
         return neurons.get(neuronIndex);
     }
 
+    @Override
+    public Neuron findMinimalDistanceBetweenItemsAndClusters(List<Item> items, List<List<Double>> notNormalizedItemsCoordinates, List<Neuron> neurons) {
+        List<List<Double>> distances = new ArrayList<>();
+
+        for (Item tempItem : items) {
+            List<Double> distanceLine = calculateDistance(tempItem, notNormalizedItemsCoordinates, neurons);
+            distances.add(distanceLine);
+        }
+
+        List<Double> sums = new ArrayList<>();
+        double sum;
+        for (int i = 0; i < distances.get(0).size(); i++) {
+            sum = 0.0;
+            for (int j = 0; j < distances.size(); j++) {
+                sum += distances.get(j).get(i);
+            }
+            sums.add(sum);
+        }
+
+        double minDistance = sums.get(0);
+        int neuronIndex = 0;
+        for (int i = 1; i < sums.size(); i++) {
+            if (sums.get(i) < minDistance) {
+                minDistance = sums.get(i);
+                neuronIndex = i;
+            }
+        }
+
+        return neurons.get(neuronIndex);
+    }
+
+    @Override
+    public Neuron findMinimalDistanceBetweenItemsAndClusters(List<Item> items, List<Neuron> neurons) {
+        return null;
+    }
+
     private List<Double> calculateDistance(Item item, List<List<Double>> notNormalizedItemsCoordinates, List<Neuron> neurons) {
         List<List<Double>> X_NotNormalized = notNormalizedItemsCoordinates;
         List<List<Double>> M = new ArrayList<>();

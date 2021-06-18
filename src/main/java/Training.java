@@ -37,6 +37,8 @@ public class Training {
     private int clusterMultiplier;
     private String pathToData;
     private String appendToPath;
+    private int iterationNumber;
+    private int iterationCount;
 
     private TrainingAlgorithmType trainingAlgorithmType;
 
@@ -52,7 +54,9 @@ public class Training {
             int repeatCount,
             int neuronsMultiplier,
             String pathToData,
-            String appendToPath
+            String appendToPath,
+            int iterationNumber,
+            int iterationCount
     ) {
         this.trainingAlgorithmType = trainingAlgorithmType;
         this.operatingSystem = operatingSystem;
@@ -66,6 +70,8 @@ public class Training {
         this.clusterMultiplier = neuronsMultiplier;
         this.pathToData = pathToData;
         this.appendToPath = appendToPath;
+        this.iterationNumber = iterationNumber;
+        this.iterationCount = iterationCount;
 
         return this;
     }
@@ -91,9 +97,13 @@ public class Training {
         items = normalizationPicker.getNormalizationByType(normalizationType).normalize(items);
 
         // if using greedy heuristics then use only RANDOM neuron generator
-        if (trainingAlgorithmType == TrainingAlgorithmType.GREEDY_HEURISTICS) {
+        if (trainingAlgorithmType == TrainingAlgorithmType.GREEDY_HEURISTICS ||
+                trainingAlgorithmType == TrainingAlgorithmType.GREEDY_HEURISTICS_2
+        ) {
             this.clusterCount *= clusterMultiplier;
             this.neuronInitializeType = NeuronInitializeType.RANDOM;
+        } else if (trainingAlgorithmType == TrainingAlgorithmType.KOHONEN_SOM_GREEDY) {
+            this.clusterCount *= clusterMultiplier;
         }
 
         List<Neuron> neurons = neuronCreatorPicker.getNeuronCreatorByType(neuronInitializeType)
@@ -102,6 +112,8 @@ public class Training {
                         items.get(0).getCoordinates().size(),
                         items
                 );
+
+        System.out.println("TEST " + trainingAlgorithmType);
 
         TrainingAlgorithm trainingAlgorithm = new TrainingAlgorithmPicker().getMetricByType(this.trainingAlgorithmType);
         trainingAlgorithm.setParams(
@@ -118,7 +130,15 @@ public class Training {
 
         clusterFinder.find(items, neurons);
 
-        writer.setParams(items, neurons, pathToData, appendToPath, metricType)
+        writer.setParams(
+                items,
+                neurons,
+                pathToData,
+                appendToPath,
+                metricType,
+                iterationNumber,
+                iterationCount
+        )
                 .writeData()
                 .writeNeurons()
                 .writeDistance();

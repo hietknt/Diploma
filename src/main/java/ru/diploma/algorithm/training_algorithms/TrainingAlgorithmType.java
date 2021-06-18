@@ -6,5 +6,9 @@ public enum TrainingAlgorithmType {
 
     KOHONEN_SOM_2,
 
-    GREEDY_HEURISTICS
+    KOHONEN_SOM_GREEDY,
+
+    GREEDY_HEURISTICS,
+
+    GREEDY_HEURISTICS_2
 }

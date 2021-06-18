@@ -1,9 +1,5 @@
 package ru.diploma.algorithm.util;
 
-import org.apache.commons.math3.linear.Array2DRowRealMatrix;
-import org.apache.commons.math3.linear.LUDecomposition;
-import org.apache.commons.math3.linear.MatrixUtils;
-import org.apache.commons.math3.linear.RealMatrix;
 import ru.diploma.algorithm.basic.Item;
 import ru.diploma.algorithm.basic.Neuron;
 
@@ -199,7 +195,15 @@ public class MathFunctions {
         return Math.sqrt(distance);
     }
 
-    public void findCovarianceMatrix() {
+    public double findMinimalValue(List<Double> line) {
+        double minValue = line.get(0);
+        for (int i = 1; i < line.size(); i++) {
+            if (minValue > line.get(i)) {
+                minValue = line.get(i);
+            }
+        }
 
+        return minValue;
     }
+
 }

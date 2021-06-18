@@ -1,0 +1,146 @@
+package ru.diploma.algorithm.analization;
+
+import ru.diploma.algorithm.metric.MetricType;
+import ru.diploma.algorithm.util.FileReader;
+
+import java.util.ArrayList;
+import java.util.List;
+
+// Собираем сводную таблицу для сравнения изначальных и конечных данных о кластеризации
+public class PivotTable {
+
+    private String PREFIX_FILE = "/results/";
+    private String ADDITIONAL_FULL_NAME_PATH = "_full.txt";
+    private String RESULT_PATH = "_result";
+    private String fileName;
+
+    private int iteration;
+
+    private List<Integer> startedClusters;
+    private List<Integer> endedClusters;
+
+    private FileReader reader = new FileReader();
+
+    public PivotTable() {
+
+    }
+
+    public PivotTable setParams(
+            String fileName,
+            int iteration
+    ) {
+        this.fileName = fileName;
+        this.iteration = iteration;
+
+        return this;
+    }
+
+    public void create(MetricType type) {
+        String fullPath1 = "/" + fileName + ADDITIONAL_FULL_NAME_PATH;
+        String metric = getMetricNameByType(type);
+        String fullPath2 = PREFIX_FILE + metric + fileName + "_" + metric.replace("/", "") + "_"+ + iteration + RESULT_PATH + ".txt";
+
+        startedClusters = reader.readFullFileAndGetClustersOnly(fullPath1);
+        endedClusters = reader.readClusteredFileGetClusterOnly(fullPath2);
+
+        createTable(startedClusters, endedClusters);
+    }
+
+    public void createTable(List<Integer> startedClusters, List<Integer> endedClusters) {
+        int batchCount = batchCount(startedClusters);
+        int[][] matrix = new int[batchCount + 1][batchCount + 1];
+        List<Integer> batchesNumber = diffNumbers(startedClusters);
+        List<Integer> clusterNumber = diffNumbers(endedClusters);
+
+        for (int i = 1; i < matrix.length; i++) {
+            if (endedClusters.size() != (i - 1)) {
+                matrix[0][i] = clusterNumber.get(i - 1);
+            } else {
+                break;
+            }
+        }
+
+        for (int i = 1; i < matrix.length; i++) {
+            if (endedClusters.size() != (i - 1)) {
+                matrix[i][0] = batchesNumber.get(i - 1);
+            } else {
+                break;
+            }
+        }
+
+        for (int i = 0; i < startedClusters.size(); i++) {
+            int indexCluster = findClusterIndex(matrix, endedClusters.get(i));
+            int indexBatch = findBatchIndex(matrix, startedClusters.get(i));
+
+            matrix[indexBatch][indexCluster]++;
+        }
+
+
+
+        for (int i = 0; i < matrix.length; i++) {
+            for ( int j = 0; j < matrix[0].length; j++) {
+                System.out.print(matrix[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+
+    private int batchCount(List<Integer> startedClusters) {
+        List<Integer> batches = new ArrayList<>();
+
+        for (Integer value : startedClusters) {
+            if (!batches.contains(value)) {
+                batches.add(value);
+            }
+        }
+
+        return batches.size();
+    }
+
+    private List<Integer> diffNumbers(List<Integer> startedClusters){
+        List<Integer> batches = new ArrayList<>();
+
+        for (Integer value : startedClusters) {
+            if (!batches.contains(value)) {
+                batches.add(value);
+            }
+        }
+
+        return batches;
+    }
+
+    private int findClusterIndex(int[][] matrix, int clusterNumber) {
+        for (int i = 1; i < matrix.length; i++) {
+            if (matrix[0][i] == clusterNumber) {
+                return i;
+            }
+        }
+
+        return 0;
+    }
+
+    private int findBatchIndex(int [][] matrix, int batchNumber) {
+        for (int i = 1; i < matrix.length; i++) {
+            if (matrix[i][0] == batchNumber) {
+                return i;
+            }
+        }
+
+        return 0;
+    }
+
+
+    private String getMetricNameByType(MetricType type) {
+        String pathToMetricType = "";
+
+        switch (type) {
+            case CHEBYSHEV -> pathToMetricType = "CHEBYSHEV/";
+            case EUCLIDEAN -> pathToMetricType = "EUCLIDEAN/";
+            case EUCLIDEAN_WITHOUT_SQRT -> pathToMetricType = "EUCLIDEAN_WITHOUT_SQRT/";
+            case MAHALANOBIS -> pathToMetricType = "MAHALANOBIS/";
+            case MANHATTAN -> pathToMetricType = "MANHATTAN/";
+        }
+
+        return pathToMetricType;
+    }
+}

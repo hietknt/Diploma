@@ -8,8 +8,7 @@ import ru.diploma.algorithm.util.MathFunctions;
 
 import java.util.List;
 
-// Жадные эаристики с удалением самого дальнего нейрона
-public class GreedyHeuristics implements TrainingAlgorithm {
+public class KohonenSOM_Greedy implements TrainingAlgorithm {
 
     // Main data.txt
     private List<Item> items;
@@ -26,6 +25,7 @@ public class GreedyHeuristics implements TrainingAlgorithm {
 
     // Initial lambda value
     private double lambda;
+    private double startLambda;
 
     // Step of algorithm
     private double step;
@@ -58,10 +58,12 @@ public class GreedyHeuristics implements TrainingAlgorithm {
         this.repeatCount = repeatCount;
         this.metric = metric;
         this.exactlyNeuronCount = neuronCount / neuronsMultiplier;
+        this.startLambda = lambda;
     }
 
     @Override
     public void startLearning() {
+
         Neuron nearestNeuron;
         Neuron farthestNeuron;
         int neuronIndex;
@@ -69,18 +71,36 @@ public class GreedyHeuristics implements TrainingAlgorithm {
         List<Double> neuronCoordinates;
         List<Double> newNeuronCoordinates;
 
-        int n = this.items.size();
-        repeatCount = (int) Math.floor((double) n / (double) (neuronCount + 1));
-
         int tempLambdaDivider = 1;
 
-        int counter = 0;
-        for (Item item : this.items) {
-            if (counter == repeatCount) {
-                System.out.println("Lambda: " + lambda);
-                counter = 0;
-                lambda = 0.5 / ++tempLambdaDivider;
-                //lambda -= step;
+        while (lambda > 0.000001) {
+            System.out.println("Lambda: " + lambda);
+            for (int i = 0; i < repeatCount; i++) {
+                for (Item item : this.items) {
+                    itemCoordinates = item.getCoordinates();
+
+                    switch (metric.getMetricType()) {
+                        case MAHALANOBIS -> nearestNeuron = metric.findMinimumDistance(item, this.items, this.notNormalizedItemsCoordinates, this.neurons);
+                        default -> nearestNeuron = metric.findMinimumDistance(item, this.neurons);
+                    }
+                    neuronIndex = this.neurons.indexOf(nearestNeuron);
+
+                    neuronCoordinates = nearestNeuron.getCoordinates();
+
+                    // W(k) = W(k) + lambda*(X(m) - W(k))
+                    newNeuronCoordinates =
+                            mathFunctions
+                                    .sum(neuronCoordinates, mathFunctions
+                                            .multiplication(lambda, (mathFunctions
+                                                    .difference(itemCoordinates, neuronCoordinates))));
+
+                    nearestNeuron.setCoordinates(newNeuronCoordinates);
+                    this.neurons.set(neuronIndex, nearestNeuron);
+                }
+            }
+
+            if (this.neurons.size() != exactlyNeuronCount) {
+                this.lambda = this.startLambda / ++tempLambdaDivider;
 
                 // Remove farthest neuron
                 if (this.neurons.size() != this.exactlyNeuronCount) {
@@ -91,28 +111,9 @@ public class GreedyHeuristics implements TrainingAlgorithm {
 
                     this.neurons.remove(farthestNeuron);
                 }
+            } else {
+                lambda -= step;
             }
-            itemCoordinates = item.getCoordinates();
-
-            switch (metric.getMetricType()) {
-                case MAHALANOBIS -> nearestNeuron = metric.findMinimumDistance(item, this.items, this.notNormalizedItemsCoordinates, this.neurons);
-                default -> nearestNeuron = metric.findMinimumDistance(item, this.neurons);
-            }
-            neuronIndex = this.neurons.indexOf(nearestNeuron);
-
-            neuronCoordinates = nearestNeuron.getCoordinates();
-
-            // W(k) = W(k) + lambda*(X(m) - W(k))
-            newNeuronCoordinates =
-                    mathFunctions
-                            .sum(neuronCoordinates, mathFunctions
-                                    .multiplication(lambda, (mathFunctions
-                                            .difference(itemCoordinates, neuronCoordinates))));
-
-            nearestNeuron.setCoordinates(newNeuronCoordinates);
-            this.neurons.set(neuronIndex, nearestNeuron);
-
-            counter++;
         }
     }
 
@@ -123,6 +124,6 @@ public class GreedyHeuristics implements TrainingAlgorithm {
 
     @Override
     public List<Item> getItems() {
-        return this.items;
+        return items;
     }
 }
