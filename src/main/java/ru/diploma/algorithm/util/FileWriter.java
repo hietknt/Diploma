@@ -2,17 +2,18 @@ package ru.diploma.algorithm.util;
 
 import ru.diploma.algorithm.basic.Item;
 import ru.diploma.algorithm.basic.Neuron;
-import ru.diploma.algorithm.metric.type.EuclideanMetric;
+import ru.diploma.algorithm.metric.MetricType;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.List;
 
 public class FileWriter {
-    private String APPEND_FILE_PATH = "_result.txt";
-    private String APPEND_FILE_NEURON_PATH = "_neuronsResult.txt";
-    private String APPEND_FILE_DISTANCE_PATH = "_distanceResult.txt";
-    private String PATH_PREFIX = "src/main/resources/results/";
+    private final String APPEND_FILE_PATH = "_result.txt";
+    private final String APPEND_FILE_NEURON_PATH = "_neuronsResult.txt";
+    private final String APPEND_FILE_DISTANCE_PATH = "_distanceResult.txt";
+    private final String PATH_PREFIX = "src/main/resources/results/";
+    private String pathToMetricType = "";
 
     private List<Item> items;
     private List<Neuron> neurons;
@@ -33,8 +34,28 @@ public class FileWriter {
         return this;
     }
 
+    public FileWriter setParams(List<Item> items, List<Neuron> neurons, String pathToData, String appendToPath, MetricType type){
+        this.items = items;
+        this.neurons = neurons;
+        this.pathToData = pathToData
+                .replace("/", "")
+                .replace(".txt", "")
+                .trim();
+        this.appendToPath = appendToPath;
+
+        switch (type) {
+            case CHEBYSHEV -> pathToMetricType = "CHEBYSHEV/";
+            case EUCLIDEAN -> pathToMetricType = "EUCLIDEAN/";
+            case EUCLIDEAN_WITHOUT_SQRT -> pathToMetricType = "EUCLIDEAN_WITHOUT_SQRT/";
+            case MAHALANOBIS -> pathToMetricType = "MAHALANOBIS/";
+            case MANHATTAN -> pathToMetricType = "MANHATTAN/";
+        }
+
+        return this;
+    }
+
     public FileWriter writeData(){
-        String fileName = PATH_PREFIX + pathToData + appendToPath + APPEND_FILE_PATH;
+        String fileName = PATH_PREFIX + pathToMetricType + pathToData + appendToPath + APPEND_FILE_PATH;
         try {
             BufferedWriter writer = new BufferedWriter(new java.io.FileWriter(fileName));
             writer.write(convertItems(items));
@@ -47,7 +68,7 @@ public class FileWriter {
     }
 
     public FileWriter writeDistance(){
-        String fileName = PATH_PREFIX + pathToData + appendToPath + APPEND_FILE_DISTANCE_PATH;
+        String fileName = PATH_PREFIX + pathToMetricType + pathToData + appendToPath + APPEND_FILE_DISTANCE_PATH;
         try {
             BufferedWriter writer = new BufferedWriter(new java.io.FileWriter(fileName));
             writer.write(convertDistances(functions.distances(items, neurons)));
@@ -60,7 +81,7 @@ public class FileWriter {
     }
 
     public FileWriter writeNeurons(){
-        String fileName = PATH_PREFIX + pathToData + appendToPath + APPEND_FILE_NEURON_PATH;
+        String fileName = PATH_PREFIX + pathToMetricType + pathToData + appendToPath + APPEND_FILE_NEURON_PATH;
         try {
             BufferedWriter writer = new BufferedWriter(new java.io.FileWriter(fileName));
             writer.write(convertNeurons(neurons));

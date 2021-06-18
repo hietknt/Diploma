@@ -78,9 +78,8 @@ public class GreedyHeuristics implements TrainingAlgorithm {
             if (counter == repeatCount) {
                 System.out.println("Lambda: " + lambda);
                 counter = 0;
-                // Тут менять коэф. обучения. Обычная формула: lambda -= step;
-                //lambda = 0.5 / ++tempLambdaDivider;
-                lambda -= step;
+                lambda = 0.5 / ++tempLambdaDivider;
+                //lambda -= step;
 
                 // Remove farthest neuron
                 if (this.neurons.size() != this.exactlyNeuronCount) {
@@ -114,7 +113,6 @@ public class GreedyHeuristics implements TrainingAlgorithm {
 
             counter++;
         }
-
     }
 
     @Override

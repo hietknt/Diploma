@@ -118,7 +118,7 @@ public class Training {
 
         clusterFinder.find(items, neurons);
 
-        writer.setParams(items, neurons, pathToData, appendToPath)
+        writer.setParams(items, neurons, pathToData, appendToPath, metricType)
                 .writeData()
                 .writeNeurons()
                 .writeDistance();
