@@ -1,12 +1,13 @@
 package ru.diploma.algorithm.analization;
 
+import ru.diploma.algorithm.basic.Item;
 import ru.diploma.algorithm.metric.MetricType;
 import ru.diploma.algorithm.util.FileReader;
+import ru.diploma.algorithm.util.FileWriter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-// Собираем сводную таблицу для сравнения изначальных и конечных данных о кластеризации
 public class PivotTable {
 
     private String PREFIX_FILE = "/results/";
@@ -20,6 +21,7 @@ public class PivotTable {
     private List<Integer> endedClusters;
 
     private FileReader reader = new FileReader();
+    private FileWriter writer = new FileWriter();
 
     public PivotTable() {
 
@@ -35,25 +37,29 @@ public class PivotTable {
         return this;
     }
 
-    public void create(MetricType type) {
+    public int[][] create(MetricType type, List<Item> items) {
         String fullPath1 = "/" + fileName + ADDITIONAL_FULL_NAME_PATH;
         String metric = getMetricNameByType(type);
         String fullPath2 = PREFIX_FILE + metric + fileName + "_" + metric.replace("/", "") + "_"+ + iteration + RESULT_PATH + ".txt";
 
-        startedClusters = reader.readFullFileAndGetClustersOnly(fullPath1);
-        endedClusters = reader.readClusteredFileGetClusterOnly(fullPath2);
+        endedClusters = new ArrayList<>();
+        for (Item item : items) {
+            endedClusters.add((int) item.getClusterNumber());
+        }
 
-        createTable(startedClusters, endedClusters);
+        startedClusters = reader.readFullFileAndGetClustersOnly(fullPath1);
+
+        return createTable(startedClusters, endedClusters);
     }
 
-    public void createTable(List<Integer> startedClusters, List<Integer> endedClusters) {
+    public int[][] createTable(List<Integer> startedClusters, List<Integer> endedClusters) {
         int batchCount = batchCount(startedClusters);
         int[][] matrix = new int[batchCount + 1][batchCount + 1];
         List<Integer> batchesNumber = diffNumbers(startedClusters);
         List<Integer> clusterNumber = diffNumbers(endedClusters);
 
         for (int i = 1; i < matrix.length; i++) {
-            if (endedClusters.size() != (i - 1)) {
+            if (clusterNumber.size() != (i - 1)) {
                 matrix[0][i] = clusterNumber.get(i - 1);
             } else {
                 break;
@@ -75,14 +81,7 @@ public class PivotTable {
             matrix[indexBatch][indexCluster]++;
         }
 
-
-
-        for (int i = 0; i < matrix.length; i++) {
-            for ( int j = 0; j < matrix[0].length; j++) {
-                System.out.print(matrix[i][j] + " ");
-            }
-            System.out.println();
-        }
+        return matrix;
     }
 
     private int batchCount(List<Integer> startedClusters) {

@@ -1,16 +1,17 @@
+import ru.diploma.algorithm.OperatingSystem;
+import ru.diploma.algorithm.analization.PivotTable;
+import ru.diploma.algorithm.basic.Item;
+import ru.diploma.algorithm.basic.Neuron;
+import ru.diploma.algorithm.initialization.items.type.ReadItemCreator;
+import ru.diploma.algorithm.initialization.neurons.NeuronCreatorPicker;
+import ru.diploma.algorithm.initialization.neurons.NeuronInitializeType;
+import ru.diploma.algorithm.metric.MetricPicker;
+import ru.diploma.algorithm.metric.MetricType;
+import ru.diploma.algorithm.normalization.NormalizationPicker;
+import ru.diploma.algorithm.normalization.NormalizationType;
 import ru.diploma.algorithm.training_algorithms.TrainingAlgorithm;
 import ru.diploma.algorithm.training_algorithms.TrainingAlgorithmPicker;
 import ru.diploma.algorithm.training_algorithms.TrainingAlgorithmType;
-import ru.diploma.algorithm.OperatingSystem;
-import ru.diploma.algorithm.basic.Item;
-import ru.diploma.algorithm.metric.MetricType;
-import ru.diploma.algorithm.basic.Neuron;
-import ru.diploma.algorithm.initialization.neurons.NeuronInitializeType;
-import ru.diploma.algorithm.normalization.NormalizationType;
-import ru.diploma.algorithm.initialization.items.type.ReadItemCreator;
-import ru.diploma.algorithm.initialization.neurons.NeuronCreatorPicker;
-import ru.diploma.algorithm.metric.MetricPicker;
-import ru.diploma.algorithm.normalization.NormalizationPicker;
 import ru.diploma.algorithm.util.ClusterFinder;
 import ru.diploma.algorithm.util.FileWriter;
 
@@ -41,6 +42,7 @@ public class Training {
     private int iterationCount;
 
     private TrainingAlgorithmType trainingAlgorithmType;
+    private PivotTable pivotTable;
 
     public Training setParams(
             TrainingAlgorithmType trainingAlgorithmType,
@@ -102,7 +104,9 @@ public class Training {
         ) {
             this.clusterCount *= clusterMultiplier;
             this.neuronInitializeType = NeuronInitializeType.RANDOM;
-        } else if (trainingAlgorithmType == TrainingAlgorithmType.KOHONEN_SOM_GREEDY) {
+        } else if (trainingAlgorithmType == TrainingAlgorithmType.KOHONEN_SOM_GREEDY ||
+                trainingAlgorithmType == TrainingAlgorithmType.KOHONEN_SOM_GREEDY_2
+        ) {
             this.clusterCount *= clusterMultiplier;
         }
 
@@ -112,8 +116,6 @@ public class Training {
                         items.get(0).getCoordinates().size(),
                         items
                 );
-
-        System.out.println("TEST " + trainingAlgorithmType);
 
         TrainingAlgorithm trainingAlgorithm = new TrainingAlgorithmPicker().getMetricByType(this.trainingAlgorithmType);
         trainingAlgorithm.setParams(
@@ -130,6 +132,12 @@ public class Training {
 
         clusterFinder.find(items, neurons);
 
+        pivotTable = new PivotTable();
+        pivotTable.setParams(
+                pathToData.replace("/", "").replace(".txt", ""),
+                iterationNumber
+        );
+
         writer.setParams(
                 items,
                 neurons,
@@ -141,7 +149,8 @@ public class Training {
         )
                 .writeData()
                 .writeNeurons()
-                .writeDistance();
+                .writeDistance()
+                .writePivotTable(pivotTable.create(metricType, items));
 
         System.out.println("ENDED" + (appendToPath.isEmpty() ? "" : (" iteration " + appendToPath)) + " with time: " + (System.currentTimeMillis() - start) + "ms.\n");
     }

@@ -1,6 +1,7 @@
 package ru.diploma.algorithm.util;
 
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -13,10 +14,16 @@ public class FileReader {
         List<Integer> startedCluster = new ArrayList<>();
 
         try {
-            Files.lines(Path.of(FileReader.class.getResource(fullPath).getPath())).forEach(line -> {
+            BufferedReader bufferedReader =
+                    new BufferedReader(
+                            new java.io.FileReader(FileReader.class.getResource(fullPath).getPath().replaceFirst("/", "")));
+
+            String line = bufferedReader.readLine();
+            while(line != null) {
                 String cluster = line.split(" ")[0].substring(0, 2);
                 startedCluster.add(Integer.valueOf(cluster));
-            });
+                line = bufferedReader.readLine();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -28,10 +35,16 @@ public class FileReader {
         List<Integer> endedCluster = new ArrayList<>();
 
         try {
-            Files.lines(Path.of(FileReader.class.getResource(fullPath).getPath())).forEach(line -> {
+            BufferedReader bufferedReader =
+                    new BufferedReader(
+                            new java.io.FileReader(FileReader.class.getResource(fullPath).getPath().replaceFirst("/", "")));
+
+            String line = bufferedReader.readLine();
+            while(line != null) {
                 String cluster = line.split(":")[0];
                 endedCluster.add(Double.valueOf(cluster).intValue());
-            });
+                line = bufferedReader.readLine();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

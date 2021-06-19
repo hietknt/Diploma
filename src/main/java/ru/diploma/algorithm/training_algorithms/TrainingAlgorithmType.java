@@ -8,6 +8,8 @@ public enum TrainingAlgorithmType {
 
     KOHONEN_SOM_GREEDY,
 
+    KOHONEN_SOM_GREEDY_2,
+
     GREEDY_HEURISTICS,
 
     GREEDY_HEURISTICS_2

@@ -5,6 +5,7 @@ import ru.diploma.algorithm.basic.Neuron;
 import ru.diploma.algorithm.metric.MetricType;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,7 @@ public class FileWriter {
     private final String APPEND_FILE_NEURON_PATH = "_neuronsResult.txt";
     private final String APPEND_FILE_DISTANCE_PATH = "_distanceResult.txt";
     private final String APPEND_FILE_CLUSTER_TABLE_PATH = "_clusterTable.txt";
+    private final String APPEND_FILE_PIVOT_TABLE_PATH = "_pivotTable.txt";
     private final String PATH_PREFIX = "src/main/resources/results/";
     private String pathToMetricType = "";
 
@@ -72,10 +74,8 @@ public class FileWriter {
 
     public FileWriter writeData() {
         String fileName = PATH_PREFIX + pathToMetricType + pathToData + appendToPath + APPEND_FILE_PATH;
-        try {
-            BufferedWriter writer = new BufferedWriter(new java.io.FileWriter(fileName));
+        try (BufferedWriter writer = new BufferedWriter(new java.io.FileWriter(fileName));){
             writer.write(convertItems(items));
-            writer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -85,10 +85,8 @@ public class FileWriter {
 
     public FileWriter writeDistance() {
         String fileName = PATH_PREFIX + pathToMetricType + pathToData + appendToPath + APPEND_FILE_DISTANCE_PATH;
-        try {
-            BufferedWriter writer = new BufferedWriter(new java.io.FileWriter(fileName));
+        try (BufferedWriter writer = new BufferedWriter(new java.io.FileWriter(fileName))){
             writer.write(convertDistances(functions.distances(items, neurons)));
-            writer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -98,10 +96,8 @@ public class FileWriter {
 
     public FileWriter writeNeurons() {
         String fileName = PATH_PREFIX + pathToMetricType + pathToData + appendToPath + APPEND_FILE_NEURON_PATH;
-        try {
-            BufferedWriter writer = new BufferedWriter(new java.io.FileWriter(fileName));
+        try (BufferedWriter writer = new BufferedWriter(new java.io.FileWriter(fileName))){
             writer.write(convertNeurons(neurons));
-            writer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -109,12 +105,21 @@ public class FileWriter {
         return this;
     }
 
-    private void writeClustersTable(String data) {
-        String fileName = PATH_PREFIX + pathToMetricType + pathToData + appendToPath + APPEND_FILE_CLUSTER_TABLE_PATH;
+    public void writePivotTable(int[][] matrix) {
+        String fileName = PATH_PREFIX + pathToMetricType + pathToData + appendToPath + APPEND_FILE_PIVOT_TABLE_PATH;
         try {
             BufferedWriter writer = new BufferedWriter(new java.io.FileWriter(fileName));
-            writer.write(data);
+            writer.write(convertPivot(matrix));
             writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void writeClustersTable(String data) {
+        String fileName = PATH_PREFIX + pathToMetricType + pathToData + appendToPath + APPEND_FILE_CLUSTER_TABLE_PATH;
+        try (BufferedWriter writer = new BufferedWriter(new java.io.FileWriter(fileName))){
+            writer.write(data);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -191,5 +196,17 @@ public class FileWriter {
         }
 
         return result.toString();
+    }
+
+    private String convertPivot(int[][] matrix) {
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[0].length; j++) {
+                result.append(matrix[i][j]).append("\t");
+            }
+            result.append("\n");
+        }
+
+        return  result.toString();
     }
 }

@@ -8,7 +8,6 @@ import ru.diploma.algorithm.util.MathFunctions;
 
 import java.util.List;
 
-// Жадные эаристики с удалением самого дальнего нейрона
 public class GreedyHeuristics implements TrainingAlgorithm {
 
     // Main data.txt
@@ -77,7 +76,7 @@ public class GreedyHeuristics implements TrainingAlgorithm {
         int counter = 0;
         for (Item item : this.items) {
             if (counter == repeatCount) {
-                System.out.println("Lambda: " + lambda);
+                //System.out.println("Lambda: " + lambda);
                 counter = 0;
                 lambda = 0.5 / ++tempLambdaDivider;
                 //lambda -= step;

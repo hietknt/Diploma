@@ -66,7 +66,7 @@ public class KohonenSOM implements TrainingAlgorithm {
         List<Double> newNeuronCoordinates;
 
         while (lambda > 0.000001) {
-            System.out.println("Lambda: " + lambda);
+            //System.out.println("Lambda: " + lambda);
             for (int i = 0; i < repeatCount; i++) {
                 for (Item item : this.items) {
                     itemCoordinates = item.getCoordinates();

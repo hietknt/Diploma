@@ -13,6 +13,7 @@ public class TrainingAlgorithmPicker {
         metricMap.put(TrainingAlgorithmType.KOHONEN_SOM, new KohonenSOM());
         metricMap.put(TrainingAlgorithmType.KOHONEN_SOM_2, new KohonenSOM_2());
         metricMap.put(TrainingAlgorithmType.KOHONEN_SOM_GREEDY, new KohonenSOM_Greedy());
+        metricMap.put(TrainingAlgorithmType.KOHONEN_SOM_GREEDY_2, new KohonenSOM_Greedy_2());
         metricMap.put(TrainingAlgorithmType.GREEDY_HEURISTICS, new GreedyHeuristics());
         metricMap.put(TrainingAlgorithmType.GREEDY_HEURISTICS_2, new GreedyHeuristic_2());
     }
